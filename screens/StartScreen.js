@@ -1,11 +1,17 @@
-import React from 'react';
-import { View, StyleSheet, Text } from "react-native";
+import React, { useEffect } from 'react';
+import { View, StyleSheet, Text, ActivityIndicator } from "react-native";
+import Colors from '../constants/Colors';
 
 
 const StartScreen = props => {
+
+    useEffect(() =>{
+        props.navigation.navigate("GreatPlaces");
+    });
+
     return (
         <View style={styles.screen}>
-            <Text>StartScreen</Text>
+            <ActivityIndicator size="large" color={Colors.grey}  />
         </View>
     )
 };  
