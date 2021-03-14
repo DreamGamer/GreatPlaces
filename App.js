@@ -2,10 +2,28 @@ import { StatusBar } from 'expo-status-bar';
 import React, { useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { enableScreens } from "react-native-screens";
-import { Provider } from "react-redux";
 import NavigationContainer from "./navigation/NavigationContainer";
 import * as Font from "expo-font";
 import { AppLoading } from "expo";
+import { createStore, combineReducers, applyMiddleware } from "redux";
+import { Provider } from "react-redux";
+import ReduxThunk from "redux-thunk";
+import placesReducer from "./store/reducer/places"
+import { composeWithDevTools } from "redux-devtools-extension";
+import { init } from "./helpers/db";
+
+init().then(() => {
+  console.log("Initialized database")
+}).catch(error => {
+  console.log("Initialized db failed");
+  console.log(error);
+});
+
+const rootReducer = combineReducers({
+  places: placesReducer
+});
+
+const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(ReduxThunk)));
 
 export default function App() {
   // OPTIMIZE Screens
@@ -25,8 +43,11 @@ export default function App() {
   }
 
   return (
+    <Provider store={store}>
       <NavigationContainer />
+    </Provider>
   );
+
 }
 
 const styles = StyleSheet.create({
